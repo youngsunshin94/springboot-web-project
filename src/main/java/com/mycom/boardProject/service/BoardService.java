@@ -31,4 +31,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
+    public void modify(Board board) {
+        boardRepository.save(board);
+    }
 }
