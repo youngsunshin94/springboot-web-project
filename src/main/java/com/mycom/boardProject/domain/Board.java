@@ -25,4 +25,13 @@ public class Board {
     private LocalDateTime updateDate;
     private int hit;
     private int replyCnt;
+
+    public Board() {
+    }
+
+    public Board(String title, String content, String writer) {
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
+    }
 }
