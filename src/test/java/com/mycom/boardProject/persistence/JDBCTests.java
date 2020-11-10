@@ -12,7 +12,7 @@ public class JDBCTests {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         try(Connection con = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/board_ex?useSSL=false&serverTimezone=Asia/Seoul",
+                "jdbc:mysql://127.0.0.1:3306/boot_board?useSSL=false&serverTimezone=Asia/Seoul",
                 "root",
                 "root")) {
         } catch(Exception e) {
