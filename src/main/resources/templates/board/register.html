@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yong`s Board</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header_wrapper">
+        <div class="header">
+            <div class="logo">
+                <a href="#">Yong`s board</a>
+            </div>
+            <div class="hd_link">
+                <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+            </div>
+        </div>
+    </div>
+    <div class="contents">
+        <div class="ct_head">
+            <h2>게시글 작성</h2>
+        </div>
+        <div class="ct_body">
+            <form th:action="@{/board/register}" method="post" id="boardForm" th:object="${boardForm}">
+                <div class="form-group">
+                    <input type="text" name="title" th:field="*{title}" placeholder="Title" class="input_title" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                </div>
+                <div class="form-group">
+                    <div contenteditable="true" placeholder="contents..." class="form_contents" spellcheck="false" id="text_content"></div>
+                    <textarea name='content' th:field="*{content}" style="display:none;"></textarea>
+                </div>
+                <div class="form-group">
+                    <!-- <label>작성자</label><br> -->
+                    <input type="text" name="writer" th:field="*{writer}">
+                </div>
+<!--                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">-->
+            </form>
+            <div class="uploadDiv">
+                <label>첨부파일</label><br>
+                <input type="file">
+                <div class="uploadResult">
+                    <ul>
+                        <li><a><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a> <span><i class="fas fa-trash"></i></span></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn" id="submitBtn">등록</button>
+            <!-- <button class="btn">Reset</button> -->
+        </div>
+        <div class="ct_footer">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $("#submitBtn").on("click", function(e){
+        e.preventDefault();
+
+        var content = escape($("#text_content").html());
+        $("textarea[name='content']").val(content);
+        console.log($("input[name='title']").val());
+        $("#boardForm").submit();
+    });
+
+});
+</script>

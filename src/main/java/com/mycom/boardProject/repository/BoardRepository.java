@@ -18,6 +18,7 @@ public class BoardRepository {
         if(board.getBno() == null) {
             em.persist(board);
         } else {
+            board.modifyDate();
             em.merge(board);
         }
         return board.getBno();
@@ -35,7 +36,7 @@ public class BoardRepository {
     }
 
     public List<Board> findAll() {
-        return em.createQuery("select b from Board b", Board.class)
+        return em.createQuery("select b from Board b order by b.bno desc ", Board.class)
                 .getResultList();
     }
 }
