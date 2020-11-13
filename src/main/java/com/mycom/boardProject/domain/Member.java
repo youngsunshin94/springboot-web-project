@@ -17,6 +17,6 @@ public class Member {
     @Column(length = 100)
     private String userName;
 
-    @Enumerated(EnumType.STRING)
-    private Auth auth;
+    @OneToOne(fetch = FetchType.LAZY)
+    private MemberAuth auth;
 }

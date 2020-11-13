@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yong`s Board</title>
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="get1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="wrapper">
+    <div class="header_wrapper">
+        <div class="header">
+            <div class="logo">
+                <a href="/board/list">Yong`s board</a>
+            </div>
+            <div class="hd_link">
+                <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+            </div>
+        </div>
+    </div>
+    <div class="contents">
+        <div class="ct_head">
+            <h2>게시물</h2>
+        </div>
+        <div class="ct_body">
+            <div class="form-group">
+                <input type="text" name="title" th:text="${board.title}" placeholder="Title" class="input_title"
+                       style="font-family: Georgia, 'Times New Roman', Times, serif;">
+            </div>
+            <div class="form-group">
+                <div contenteditable="false" th:text="${board.content}" placeholder="contents..." class="form_contents" spellcheck="false"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" name="writer" th:text="${board.writer}">
+            </div>
+
+            <div class="uploadDiv">
+                <label>첨부파일</label><br>
+                <div class="uploadResult">
+                    <ul>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a> <span><i
+                                class="fas fa-trash"></i></span></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn">List</button>
+            <button class="btn">수정</button>
+            <!-- <button class="btn">Reset</button> -->
+        </div>
+        <div class="reply">
+            <div class="reply_header">
+                <p><i class="fas fa-comment-dots"></i> 댓글
+                    <button id="addReplyBtn">댓글 쓰기</button>
+                </p>
+            </div>
+            <div class="reply-body">
+                <ul class="chat">
+                    <li>
+                        <p>
+                            <strong>replyer</strong><span>2020/07/13</span>
+                        </p>
+                        <div>댓글 ㅋㅋㅋ</div>
+                    </li>
+                </ul>
+            </div>
+            <div class="reply-footer">
+                <div class="paging">
+                    <ul class="paginate">
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">6</a></li>
+                        <li><a href="#">7</a></li>
+                        <li><a href="#">8</a></li>
+                        <li><a href="#">9</a></li>
+                        <li><a href="#">10</a></li>
+                        <li><a href="#">9</a></li>
+                        <li><a href="#">9</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="ct_footer">
+
+        </div>
+
+    </div>
+
+
+</div>
+</body>
+</html>
