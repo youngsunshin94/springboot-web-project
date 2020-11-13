@@ -27,4 +27,15 @@ public class Reply {
 
     private LocalDateTime replyDate;
     private LocalDateTime updateDate;
+
+    public Reply() {
+    }
+
+    public Reply(Board board, String reply, String replyer) {
+        this.board = board;
+        this.reply = reply;
+        this.replyer = replyer;
+        this.replyDate = LocalDateTime.now();
+        this.updateDate = LocalDateTime.now();
+    }
 }
