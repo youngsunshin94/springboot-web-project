@@ -1,6 +1,7 @@
 package com.mycom.boardProject.repository;
 
 import com.mycom.boardProject.domain.Board;
+import com.mycom.boardProject.domain.Criteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -35,8 +36,17 @@ public class BoardRepository {
         return bno;
     }
 
-    public List<Board> findAll() {
-        return em.createQuery("select b from Board b order by b.bno desc ", Board.class)
+    public List<Board> findAll(Criteria cri) {
+        int skipCount = cri.getSkipCount();
+        int amount = cri.getAmount();
+        return em.createQuery("select b from Board b order by b.bno desc", Board.class)
+                .setFirstResult(skipCount)
+                .setMaxResults(amount)
                 .getResultList();
+    }
+
+    public Long getTotalCount(Criteria cri) {
+        return em.createQuery("select count(b) from Board b", Long.class)
+                .getSingleResult();
     }
 }

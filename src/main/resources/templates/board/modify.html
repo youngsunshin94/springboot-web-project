@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yong`s Board</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header_wrapper">
+            <div class="header">
+                <div class="logo">
+                    <a href="/board/list">Yong`s board</a>
+                </div>      
+                <div class="hd_search">
+                    <input type="text">
+                    <button id="btn-search">검색</button>
+                </div>
+                <div class="hd_link">
+                    <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                </div>
+            </div>
+        </div>
+        <div class="contents">
+            <div class="ct_head">
+                <h2>게시글 수정</h2>
+            </div>
+            <div class="ct_body">
+                <form th:action="@{/board/modify}" method="post" id="form">
+                    <input type="hidden" name="bno" th:field="${board.bno}">
+                    <input type="hidden" name="pageNum" th:value="${cri.pageNum}">
+                    <input type="hidden" name="amount" th:value="${cri.amount}">
+
+                    <div class="form-group">
+                        <input type="text" th:field="${board.title}" placeholder="Title" class="input_title" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                    </div>
+                    <div class="form-group">
+                        <div contenteditable="true" th:text="${board.content}" placeholder="contents..." class="form_contents" spellcheck="false"></div>
+                        <textarea style="display:none;" name='content'></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" th:field="${board.writer}" readonly="readonly">
+                    </div>
+
+                </form>
+                <div class="uploadDiv">
+                    <label>첨부파일</label><br>
+                    <input type="file">
+                    <div class="uploadResult">
+                        <ul>
+                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a> <span><i class="fas fa-trash"></i></span></li>
+                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="btn" data-oper="modify">수정</button>
+                <button class="btn" data-oper="remove">삭제</button>
+                <button class="btn" data-oper="list">List</button>
+                <!-- <button class="btn">Reset</button> -->
+            </div>
+            <div class="ct_footer">
+               
+            </div>
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $(".form_contents").html(unescape($(".form_contents").html()));
+
+    $("button[data-oper='modify']").on("click", function (e){
+        e.preventDefault();
+
+        var content = escape($(".form_contents").html());
+        $("textarea[name='content']").val(content);
+
+        $("#form").submit();
+
+    });
+
+    $("button[data-oper='list']").on("click", function (e){
+        let pageNumTag = $("input[name='pageNum']").clone();
+        let amountTag = $("input[name='amount']").clone();
+
+        $("#form").empty();
+        $("#form").attr("action","/board/list").attr("method","get");
+        $("#form").append(pageNumTag).append(amountTag);
+
+        $("#form").submit();
+    });
+
+    $("button[data-oper='remove']").on("click", function (e){
+        $("#form").attr("action","/board/remove");
+        $("#form").submit();
+    });
+});
+
+</script>
+
+</body>
+</html>

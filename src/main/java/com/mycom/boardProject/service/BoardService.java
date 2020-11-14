@@ -1,6 +1,7 @@
 package com.mycom.boardProject.service;
 
 import com.mycom.boardProject.domain.Board;
+import com.mycom.boardProject.domain.Criteria;
 import com.mycom.boardProject.repository.BoardRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +32,16 @@ public class BoardService {
         return boardRepository.delete(bno);
     }
 
-    public List<Board> getList() {
-        return boardRepository.findAll();
+    public List<Board> getList(Criteria cri) {
+        return boardRepository.findAll(cri);
     }
 
     @Transactional
     public void modify(Board board) {
         boardRepository.save(board);
+    }
+
+    public Long getTotal(Criteria cri) {
+        return boardRepository.getTotalCount(cri);
     }
 }

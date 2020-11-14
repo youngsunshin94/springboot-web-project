@@ -50,7 +50,8 @@
 
         </div>
         <form action="/board/list" method="get" id="actionForm">
-
+            <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}" id="pageNumTag">
+            <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
         </form>
         <div class="ct_footer">
             <div class="search-box">
@@ -66,19 +67,12 @@
                 </form>
             </div>
             <div class="paging">
-                <ul class="paginate">
-                    <li><a href="#">Prev</a></li>
-                    <li class="active"><a href="#">11</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">7</a></li>
-                    <li><a href="#">8</a></li>
-                    <li><a href="#">9</a></li>
-                    <li><a href="#">10</a></li>
-                    <li><a href="#">Next</a></li>
+                <ul class="paginate" th:with="start=${pageMaker.startPage}, end=${pageMaker.endPage}">
+                        <li th:if="${pageMaker.prev}"><a th:href="${start -1}" th:text="Prev"></a></li>
+                        <li th:class="${i.current == pageMaker.cri.pageNum ? 'active' : '' }" th:each="num ,i : ${#numbers.sequence(start, end)}">
+                            <a th:href="${i.current}" th:text="${i.current}"></a>
+                        </li>
+                        <li th:if="${pageMaker.prev}"><a th:href="${end + 1}" th:text="Next"></a></li>
                 </ul>
             </div>
         </div>
@@ -100,6 +94,14 @@
         $(".conts").on("click", function(){
             actionForm.append("<input type='hidden' name='bno' value='"+$(this).find("#boardBno").html()+"'>");
             actionForm.attr("action","/board/get");
+            actionForm.submit();
+        });
+
+        $(".paginate li a").on("click", function (e){
+            e.preventDefault();
+
+            let num = $(this).attr("href");
+            document.getElementById("pageNumTag").value = num;
             actionForm.submit();
         });
 
