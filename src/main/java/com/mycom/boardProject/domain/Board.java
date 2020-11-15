@@ -46,4 +46,18 @@ public class Board {
     public void modifyDate() {
         this.updateDate = LocalDateTime.now();
     }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+                "bno=" + bno +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", writer='" + writer + '\'' +
+                ", regDate=" + regDate +
+                ", updateDate=" + updateDate +
+                ", hit=" + hit +
+                ", replyCnt=" + replyCnt +
+                '}';
+    }
 }

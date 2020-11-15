@@ -1,6 +1,7 @@
 package com.mycom.boardProject.repository;
 
 import com.mycom.boardProject.domain.Board;
+import com.mycom.boardProject.domain.Criteria;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

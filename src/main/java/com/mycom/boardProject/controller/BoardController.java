@@ -23,6 +23,7 @@ public class BoardController {
     @GetMapping("/board/list")
     public String getList(Model model, Criteria cri) {
         log.info("list");
+
         Long total = boardService.getTotal(cri);
         model.addAttribute("list", boardService.getList(cri));
         PageDTO pageDTO = new PageDTO(cri, total);
@@ -70,6 +71,8 @@ public class BoardController {
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
+        rttr.addAttribute("type", cri.getType());
+        rttr.addAttribute("keyword", cri.getKeyword());
 
         return "redirect:/board/list";
     }
@@ -81,6 +84,8 @@ public class BoardController {
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
+        rttr.addAttribute("type", cri.getType());
+        rttr.addAttribute("keyword", cri.getKeyword());
 
         return "redirect:/board/list";
     }

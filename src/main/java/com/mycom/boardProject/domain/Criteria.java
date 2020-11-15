@@ -11,6 +11,9 @@ public class Criteria {
     private int pageNum;
     private int amount;
 
+    private String keyword;
+    private String type;
+
     public Criteria(int pageNum, int amount) {
         this.pageNum = pageNum;
         this.amount = amount;

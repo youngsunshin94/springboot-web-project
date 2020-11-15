@@ -3,12 +3,15 @@ package com.mycom.boardProject.service;
 import com.mycom.boardProject.domain.Board;
 import com.mycom.boardProject.domain.Criteria;
 import com.mycom.boardProject.repository.BoardRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class BoardService {
 
@@ -33,7 +36,12 @@ public class BoardService {
     }
 
     public List<Board> getList(Criteria cri) {
-        return boardRepository.findAll(cri);
+
+        if(cri.getKeyword() == null || cri.getKeyword().length()  == 0) {
+            return boardRepository.findAll(cri);
+        } else {
+            return boardRepository.findSearchAll(cri);
+        }
     }
 
     @Transactional
@@ -42,6 +50,11 @@ public class BoardService {
     }
 
     public Long getTotal(Criteria cri) {
-        return boardRepository.getTotalCount(cri);
+
+        if(cri.getKeyword() == null || cri.getKeyword().length()  == 0) {
+            return boardRepository.getTotalCount(cri);
+        } else {
+            return boardRepository.getSearchTotalCount(cri);
+        }
     }
 }

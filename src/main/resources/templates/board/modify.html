@@ -34,6 +34,8 @@
                     <input type="hidden" name="bno" th:field="${board.bno}">
                     <input type="hidden" name="pageNum" th:value="${cri.pageNum}">
                     <input type="hidden" name="amount" th:value="${cri.amount}">
+                    <input type="hidden" name="type" th:value="${cri.type}">
+                    <input type="hidden" name="keyword" th:value="${cri.keyword}">
 
                     <div class="form-group">
                         <input type="text" th:field="${board.title}" placeholder="Title" class="input_title" style="font-family: Georgia, 'Times New Roman', Times, serif;">
@@ -89,10 +91,12 @@ $(document).ready(function(){
     $("button[data-oper='list']").on("click", function (e){
         let pageNumTag = $("input[name='pageNum']").clone();
         let amountTag = $("input[name='amount']").clone();
+        let keywordTag = $("input[name='keyword']").clone();
+        let typeTag = $("input[name='type']").clone();
 
         $("#form").empty();
         $("#form").attr("action","/board/list").attr("method","get");
-        $("#form").append(pageNumTag).append(amountTag);
+        $("#form").append(pageNumTag).append(amountTag).append(keywordTag).append(typeTag);
 
         $("#form").submit();
     });
