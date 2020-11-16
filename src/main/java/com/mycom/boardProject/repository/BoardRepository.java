@@ -48,6 +48,12 @@ public class BoardRepository {
                 .getResultList();
     }
 
+    public void hitUp(Long bno) {
+        Board board = em.find(Board.class, bno);
+        board.hitUp();
+        em.merge(board);
+    }
+
     public List<Board> findSearchAll(Criteria cri) {
         String jpql = "select b from Board b where";
         String keyword = cri.getKeyword();

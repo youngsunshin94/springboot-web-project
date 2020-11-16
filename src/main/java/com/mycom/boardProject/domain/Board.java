@@ -47,6 +47,10 @@ public class Board {
         this.updateDate = LocalDateTime.now();
     }
 
+    public void hitUp() {
+        this.hit += 1;
+    }
+
     @Override
     public String toString() {
         return "Board{" +

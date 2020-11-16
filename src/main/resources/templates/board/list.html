@@ -87,13 +87,13 @@
     $(document).ready(function(){
 
         $(".conts_text p").each(function(i, content){
-            var ct = unescape($(content).html());
-            var img_tag = /<img(.*?)>/gi;
+            let ct = unescape($(content).html());
+            let img_tag = /<img(.*?)>/gi;
             ct = ct.replace(img_tag, "");
             $(this).html(ct);
         });
 
-        var actionForm = $("#actionForm");
+        let actionForm = $("#actionForm");
 
         $(".conts").on("click", function(){
             actionForm.append("<input type='hidden' name='bno' value='"+$(this).find("#boardBno").html()+"'>");

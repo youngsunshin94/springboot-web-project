@@ -26,7 +26,9 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
+    @Transactional
     public Board get(Long bno) {
+        boardRepository.hitUp(bno);
         return boardRepository.findOne(bno);
     }
 
