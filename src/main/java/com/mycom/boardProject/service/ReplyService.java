@@ -13,8 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyService {
 
-    private ReplyRepository replyRepository;
+    private final ReplyRepository replyRepository;
 
+    @Transactional
     public void saveReply(Reply reply) {
         replyRepository.save(reply);
     }
@@ -23,6 +24,7 @@ public class ReplyService {
         return replyRepository.findOne(rno);
     }
 
+    @Transactional
     public void removeReply(Long rno) {
         replyRepository.delete(rno);
     }
