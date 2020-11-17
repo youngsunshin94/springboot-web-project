@@ -1,8 +1,6 @@
 package com.mycom.boardProject.controller;
 
-import com.mycom.boardProject.domain.Board;
-import com.mycom.boardProject.domain.Reply;
-import com.mycom.boardProject.domain.ReplyDTO;
+import com.mycom.boardProject.domain.*;
 import com.mycom.boardProject.service.BoardService;
 import com.mycom.boardProject.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +33,10 @@ public class ReplyController {
     }
 
     @GetMapping(value = "/pages/{bno}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Reply>> getList(@PathVariable("bno") Long bno, @PathVariable("page") int page) {
+    public ResponseEntity<ReplyPageDTO> getList(@PathVariable("bno") Long bno, @PathVariable("page") int page) {
 
-
-        return new ResponseEntity<>(replyService.findAll(bno), HttpStatus.OK);
+        Criteria cri = new Criteria(page, 10);
+        return new ResponseEntity<ReplyPageDTO>(replyService.findAll(bno, cri), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{rno}", produces = "application/json;charset=UTF-8")

@@ -1,5 +1,6 @@
 package com.mycom.boardProject.repository;
 
+import com.mycom.boardProject.domain.Criteria;
 import com.mycom.boardProject.domain.Reply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,9 +31,18 @@ public class ReplyRepository {
         em.remove(replyFind);
     }
 
-    public List<Reply> findAll(Long bno) {
-        return em.createQuery("select r from Reply r where r.board.bno = :bno")
+    public List<Reply> findAll(Long bno, Criteria cri) {
+        int skipCount = cri.getSkipCount();
+        int amount = cri.getAmount();
+        return em.createQuery("select r from Reply r where r.board.bno = :bno order by r.rno asc")
                 .setParameter("bno", bno)
+                .setFirstResult(skipCount)
+                .setMaxResults(amount)
                 .getResultList();
+    }
+
+    public Long getTotalReply(Long bno) {
+        return em.createQuery("select count(r) from Reply r", Long.class)
+                .getSingleResult();
     }
 }

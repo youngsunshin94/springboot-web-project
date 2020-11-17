@@ -1,6 +1,8 @@
 package com.mycom.boardProject.service;
 
+import com.mycom.boardProject.domain.Criteria;
 import com.mycom.boardProject.domain.Reply;
+import com.mycom.boardProject.domain.ReplyPageDTO;
 import com.mycom.boardProject.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,13 @@ public class ReplyService {
         replyRepository.delete(rno);
     }
 
-    public List<Reply> findAll(Long bno) {
-        return replyRepository.findAll(bno);
+    public ReplyPageDTO findAll(Long bno, Criteria cri) {
+
+        if(cri.getPageNum() == -1) {
+            int page = (int)(Math.ceil(replyRepository.getTotalReply(bno) / 10.0));
+
+            cri.setPageNum(page);
+        }
+        return new ReplyPageDTO(replyRepository.findAll(bno, cri), replyRepository.getTotalReply(bno));
     }
 }
