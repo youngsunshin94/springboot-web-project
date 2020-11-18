@@ -64,4 +64,8 @@ public class Board {
                 ", replyCnt=" + replyCnt +
                 '}';
     }
+
+    public void updateReplyCnt(int amount) {
+        this.replyCnt += amount;
+    }
 }
