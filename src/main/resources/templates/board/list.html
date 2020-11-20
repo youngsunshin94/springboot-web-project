@@ -31,19 +31,19 @@
         </div>
         <div class="ct_body">
             <ul>
-                <li th:each="board : ${list}">
+                <li th:each="board : ${list}" data-th-value="${board.bno}">
                     <div class="conts">
                         <div id="boardBno" style="display: none" th:text="${board.bno}"></div>
                         <div class="conts_text">
                             <h2 th:text="${board.title}"></h2>
                             <p th:text="${board.content}"></p>
-                            <div>
+                            <div id="contsFooter">
                                 <span th:text="${board.writer}"></span><span th:text="'조회수 ' + ${board.hit}">조회수</span>
                                 <span th:text="${#temporals.format(board.regDate,'yyyy-MM-dd')}"></span>
                                 <span th:text="${board.replyCnt}"><i class="fas fa-comment-dots"></i></span>
-                                <span><i class="fas fa-file-alt"></i></span>
                             </div>
                         </div>
+                        <div class="thumbnail"></div>
                     </div>
                 </li>
             </ul>
@@ -130,6 +130,29 @@
             searchForm.submit();
         });
 
+        $(".ct_body ul li").each(function () {
+            let bno = $(this).val();
+            let thumbnail = $(this).find(".thumbnail");
+            let contsFooter = $(this).find("#contsFooter");
+
+            $.getJSON("/board/getAttachList", {bno: bno}, function (result) {
+
+                let str = "";
+                let strF = "";
+
+                for (let i = 0; i < result.length; i++) {
+
+                    if (result[i].image && str.length == 0) {
+                        let fileCallPath = encodeURIComponent(result[i].uploadPath + "/" + result[i].uuid + "_" + result[i].fileName);
+                        str = "<img src='/display?fileName="+ fileCallPath +"'>";
+                        thumbnail.append(str);
+                    } else if(!result[i].image && strF.length == 0) {
+                        strF = "<span><i class=\"fas fa-file-alt\"></i></span>";
+                        contsFooter.append(strF);
+                    }
+                }
+            });
+        });
     });
 </script>
 

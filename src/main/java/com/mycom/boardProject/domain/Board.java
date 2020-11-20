@@ -6,10 +6,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@Setter
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +18,8 @@ public class Board {
 
     @Column(length = 200)
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(length = 50)
@@ -29,6 +32,9 @@ public class Board {
 
     @Column(columnDefinition = "integer default 0")
     private int replyCnt;
+
+    @OneToMany(mappedBy = "board")
+    private List<Attach> attachList = new ArrayList<>();
 
     public Board() {
     }
@@ -43,12 +49,30 @@ public class Board {
         this.replyCnt = 0;
     }
 
+    public void updateBnoSetting(Long bno) {
+        this.bno = bno;
+    }
+
     public void modifyDate() {
         this.updateDate = LocalDateTime.now();
     }
 
     public void hitUp() {
         this.hit += 1;
+    }
+
+    public void updateReplyCnt(int amount) {
+        this.replyCnt += amount;
+    }
+
+    public void updateAttach(List<AttachFileDTO> list) {
+
+        for (AttachFileDTO attachFileDTO : list) {
+            Attach attach = new Attach(attachFileDTO.getUuid(), attachFileDTO.getUploadPath(),
+                    attachFileDTO.getFileName(), attachFileDTO.isImage());
+
+            this.attachList.add(attach);
+        }
     }
 
     @Override
@@ -62,10 +86,7 @@ public class Board {
                 ", updateDate=" + updateDate +
                 ", hit=" + hit +
                 ", replyCnt=" + replyCnt +
+                ", attachList=" + attachList +
                 '}';
-    }
-
-    public void updateReplyCnt(int amount) {
-        this.replyCnt += amount;
     }
 }

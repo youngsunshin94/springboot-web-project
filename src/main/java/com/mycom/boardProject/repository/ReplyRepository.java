@@ -15,7 +15,7 @@ public class ReplyRepository {
     private final EntityManager em;
 
     public void save(Reply reply) {
-        if (reply.getReply() == null) {
+        if (reply.getRno() == null) {
             em.persist(reply);
         } else {
             em.merge(reply);

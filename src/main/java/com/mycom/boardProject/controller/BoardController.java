@@ -1,17 +1,19 @@
 package com.mycom.boardProject.controller;
 
-import com.mycom.boardProject.domain.Board;
-import com.mycom.boardProject.domain.BoardForm;
-import com.mycom.boardProject.domain.Criteria;
-import com.mycom.boardProject.domain.PageDTO;
+import com.mycom.boardProject.domain.*;
 import com.mycom.boardProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,7 +45,14 @@ public class BoardController {
     public String create(BoardForm boardForm, RedirectAttributes rttr) {
 
         Board board = new Board(boardForm.getTitle(), boardForm.getContent(), boardForm.getWriter());
+        if(boardForm.getAttachList().size() > 0 && boardForm.getAttachList() != null) {
+            log.info("/board/register -> boardForm");
+            board.updateAttach(boardForm.getAttachList());
 
+            board.getAttachList().forEach(attach -> {
+                log.info("attach : " + attach.getFileName());
+            });
+        }
         Long boardId = boardService.create(board);
         rttr.addFlashAttribute("bno", boardId);
 
@@ -65,8 +74,16 @@ public class BoardController {
     }
 
     @PostMapping("/board/modify")
-    public String modify(Board board, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
+    public String modify(BoardForm boardForm, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
+
+        Board board = new Board(boardForm.getTitle(), boardForm.getContent(), boardForm.getWriter());
+        board.updateBnoSetting(boardForm.getBno());
+
+        if(boardForm.getAttachList().size() > 0 && boardForm.getAttachList() != null) {
+            board.updateAttach(boardForm.getAttachList());
+        }
         boardService.modify(board);
+
         rttr.addFlashAttribute("result", "success");
 
         rttr.addAttribute("pageNum", cri.getPageNum());
@@ -79,8 +96,7 @@ public class BoardController {
 
     @PostMapping("/board/remove")
     public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
-        Long removeBno = boardService.remove(bno);
-        rttr.addFlashAttribute("bno", removeBno);
+        boardService.remove(bno);
 
         rttr.addAttribute("pageNum", cri.getPageNum());
         rttr.addAttribute("amount", cri.getAmount());
@@ -88,5 +104,11 @@ public class BoardController {
         rttr.addAttribute("keyword", cri.getKeyword());
 
         return "redirect:/board/list";
+    }
+
+    @GetMapping(value = "/board/getAttachList", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public ResponseEntity<List<AttachFileDTO>> getAttachList(Long bno) {
+        return new ResponseEntity<>(boardService.getAttachList(bno), HttpStatus.OK);
     }
 }

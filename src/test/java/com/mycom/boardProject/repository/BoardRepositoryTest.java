@@ -46,14 +46,14 @@ class BoardRepositoryTest {
         Assertions.assertThat(board.getTitle()).isNotEqualTo(findBoard.getTitle());
     }
 
-    @Test
-    public void 게시글삭제() {
-        Board board = new Board("게시글","내용","user0");
-        Long saveId = boardRepository.save(board);
-
-        Long deleteId = boardRepository.delete(saveId);
-
-        Assertions.assertThat(saveId).isEqualTo(deleteId);
-    }
+//    @Test
+//    public void 게시글삭제() {
+//        Board board = new Board("게시글","내용","user0");
+//        Long saveId = boardRepository.save(board);
+//
+//        Long deleteId = boardRepository.delete(saveId);
+//
+//        Assertions.assertThat(saveId).isEqualTo(deleteId);
+//    }
 
 }

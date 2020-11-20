@@ -32,11 +32,9 @@ public class BoardRepository {
         return em.find(Board.class, bno);
     }
 
-    public Long delete(Long bno) {
+    public void delete(Long bno) {
         Board board = em.find(Board.class, bno);
         em.remove(board);
-
-        return bno;
     }
 
     public List<Board> findAll(Criteria cri) {

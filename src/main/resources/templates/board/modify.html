@@ -51,12 +51,9 @@
                 </form>
                 <div class="uploadDiv">
                     <label>첨부파일</label><br>
-                    <input type="file">
+                    <input type="file" name="uploadFile" multiple="multiple">
                     <div class="uploadResult">
                         <ul>
-                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a> <span><i class="fas fa-trash"></i></span></li>
-                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
-                            <li><a href="#"><i class="fas fa-file-alt"></i> 05-04_연습문제 해답</a></li>
                         </ul>
                     </div>
                 </div>
@@ -73,7 +70,7 @@
 
     </div>
 
-<script type="text/javascript">
+<script th:inline="javascript">
 $(document).ready(function(){
 
     $(".form_contents").html(unescape($(".form_contents").html()));
@@ -84,6 +81,28 @@ $(document).ready(function(){
         var content = escape($(".form_contents").html());
         $("textarea[name='content']").val(content);
 
+        let str = "";
+        let fileCount = 0;
+
+        $(".form_contents div img").each(function (){
+            str += "<input type='hidden' name='attachList["+ fileCount +"].fileName' value='"+ $(this).data("filename") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].uuid' value='"+ $(this).data("uuid") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].image' value='"+ $(this).data("type") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].uploadPath' value='"+ $(this).data("path") +"'>";
+
+            fileCount++;
+        });
+
+        $(".uploadResult ul li").each(function () {
+            str += "<input type='hidden' name='attachList["+ fileCount +"].fileName' value='"+ $(this).data("filename") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].uuid' value='"+ $(this).data("uuid") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].image' value='"+ $(this).data("type") +"'>";
+            str += "<input type='hidden' name='attachList["+ fileCount +"].uploadPath' value='"+ $(this).data("path") +"'>";
+
+            fileCount++;
+        });
+
+        $("#form").append(str);
         $("#form").submit();
 
     });
@@ -105,6 +124,101 @@ $(document).ready(function(){
         $("#form").attr("action","/board/remove");
         $("#form").submit();
     });
+
+    /*<![CDATA[*/
+    var csrfTokenValue = /*[[${_csrf.token}]]*/ '';
+    var csrfHeaderName = /*[[${_csrf.headerName}]]*/ '';
+    /*]]>*/
+
+    $(document).ajaxSend(function(e, xhr, options){
+        xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+    });
+
+    $("input[type='file']").change(function(){
+
+        let formData = new FormData();
+        let inputFile = $("input[name='uploadFile']");
+        let files = inputFile[0].files;
+
+        for (let i = 0; i < files.length; i++) {
+
+            if (!checkExtension(files[i].name, files[i].size)) {
+                return false;
+            }
+            formData.append("uploadFile", files[i]);
+        }
+
+        $.ajax({
+            url:"/uploadAjaxAction",
+            type:"post",
+            contentType:false,
+            processData:false,
+            data:formData,
+            dataType:"json",
+            success: function (result) {
+                showUploadResult(result);
+            }
+        })
+
+    });
+
+    let maxSize = 5242880;
+    let regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+
+    function checkExtension(fileName, fileSize) {
+        if (fileSize > maxSize) {
+            alert("파일 용량 초과");
+            return false;
+        }
+
+        if (regex.test(fileName)) {
+            alert("해당 종류의 파일은 업로드 할 수 없습니다.");
+            return false;
+        }
+        return true;
+    }
+
+    function showUploadResult(result) {
+        if(result == null || result.length == 0) {
+            return;
+        }
+
+        $(result).each(function(i, obj){
+            let fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+            let str = "";
+
+            if (obj.image) {
+                str += "<div><img src='/display?fileName="+ fileCallPath +"' data-path='"+obj.uploadPath+"' data-filename='"+ obj.fileName +"' data-uuid='"+ obj.uuid +"' data-type='"+ obj.image +"'></div>"
+                $(".form_contents").append(str);
+            } else {
+                str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><i class='fas fa-file-alt'></i> "+obj.fileName+" <span data-file='"+fileCallPath+"' data-type='file'><i class='fas fa-trash'></i></span></li>"
+
+                $(".uploadResult ul").append(str);
+            }
+        });
+    }
+
+    let bno = $("#bno").val();
+    $.getJSON("/board/getAttachList", {bno: bno}, function (list) {
+        let str = "";
+        for(let i=0; i<list.length; i++) {
+
+            if(!list[i].image) {
+                let fileCallPath = encodeURIComponent(list[i].uploadPath + "/" + list[i].uuid + "_" + list[i].fileName);
+
+                str += "<li data-path='"+list[i].uploadPath+"' data-uuid='"+list[i].uuid+"' data-filename='"+list[i].fileName+"' data-type='"+list[i].image+"'><i class='fas fa-file-alt'></i> "+list[i].fileName+" <span><i class='fas fa-trash'></i></span></li>"
+            }
+        }
+
+        $(".uploadResult ul").append(str);
+    });
+
+    $(".uploadResult").on("click", "li span", function(){
+        let targetLi = $(this).closest("li");
+
+        targetLi.remove();
+    });
+
 });
 
 </script>

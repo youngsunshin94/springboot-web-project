@@ -4,11 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 public class BoardForm {
-
+    private Long bno;
     private String title;
     private String content;
     private String writer;
@@ -17,16 +19,6 @@ public class BoardForm {
     private int hit;
     private int replyCnt;
 
-//    public static BoardForm createBoardForm(Board board) {
-//
-//        BoardForm boardForm = new BoardForm();
-//        boardForm.title = board.getTitle();
-//        boardForm.content = board.getContent();
-//        boardForm.writer = board.getWriter();
-//        boardForm.hit = board.getHit();
-//        boardForm.replyCnt = board.getReplyCnt();
-//        boardForm.regDate = board.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//
-//        return boardForm;
-//    }
+    private List<AttachFileDTO> attachList = new ArrayList<>();
+
 }
