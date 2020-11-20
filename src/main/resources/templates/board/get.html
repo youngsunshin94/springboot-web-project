@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,10 @@
                 <a href="/board/list">Yong`s board</a>
             </div>
             <div class="hd_link">
-                <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/user/login}"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+            </div>
+            <div class="hd_link" >
+                <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt"></i></i> 로그아웃</a>
             </div>
         </div>
     </div>
@@ -46,7 +49,7 @@
                 </div>
             </div>
             <button class="btn" data-oper="list">List</button>
-            <button class="btn" data-oper="modify">수정</button>
+            <button th:if="${#authentication.name == board.writer}" class="btn" data-oper="modify">수정</button>
 
             <form action="/board/modify" method="get" id="operForm">
                 <input type="hidden" name="bno" th:value="${board.bno}" id="bno">
@@ -59,7 +62,7 @@
         <div class="reply">
             <div class="reply_header">
                 <p><i class="fas fa-comment-dots"></i> 댓글
-                    <button id="addReplyBtn">댓글 쓰기</button>
+                    <button sec:authorize="isAuthenticated()" id="addReplyBtn">댓글 쓰기</button>
                 </p>
             </div>
             <div class="reply-body">
@@ -85,7 +88,7 @@
         </div>
         <div class="modal-body">
             <input type="text" name="reply" placeholder="댓글"><br>
-            <input type="text" name="replyer">
+            <input type="text" name="replyer" th:value="${#authentication.name}" readonly="readonly">
         </div>
         <div class="modal-footer">
             <button class="modalRegisterBtn">등록</button>
@@ -117,7 +120,7 @@ $(document).ready(function(){
 
     $("button[data-oper='modify']").on("click", function(e){
         e.preventDefault();
-
+        operForm.append("<input type='hidden' name='writer' value='${board.writer}' />");
         operForm.submit();
     });
 
@@ -198,10 +201,17 @@ $(document).ready(function (){
         modal.hide();
     });
 
+    /*<![CDATA[*/
+    let member = /*[[${#authentication.name}]]*/ '';
+    /*]]>*/
+
     $(".chat").on("click", "li", function(){
+
         let rno = $(this).data('rno');
-        console.log("reply click");
         replyService.getOne(rno, function(result){
+            if(result.replyer != member){
+                return false;
+            }
            modalInputReplyer.val(result.replyer);
             modalInputReply.val(result.reply);
             modal.find("button[class != modalCloseBtn]").hide();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Yong`s Board</title>
@@ -17,11 +17,11 @@
                 <a href="/board/list">Yong`s board</a>
             </div>
             <div class="hd_link">
-                <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                <a sec:authorize="isAnonymous()" th:href="@{/user/login}"><i class="fas fa-sign-in-alt"></i> 로그인</a>
             </div>
-            <!-- <div class="hd_link">
-                <a href="#"><i class="fas fa-sign-out-alt"></i></i> 로그아웃</a>
-            </div> -->
+            <div class="hd_link" >
+                <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt"></i></i> 로그아웃</a>
+            </div>
         </div>
     </div>
     <div class="contents">

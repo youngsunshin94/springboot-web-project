@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,8 +20,8 @@
                     <input type="text">
                     <button id="btn-search">검색</button>
                 </div>
-                <div class="hd_link">
-                    <a href="#"><i class="fas fa-sign-in-alt"></i> 로그인</a>
+                <div class="hd_link" >
+                    <a sec:authorize="isAuthenticated()" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt"></i></i> 로그아웃</a>
                 </div>
             </div>
         </div>

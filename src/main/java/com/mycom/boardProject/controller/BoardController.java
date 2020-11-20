@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -69,7 +70,6 @@ public class BoardController {
     @GetMapping("/board/modify")
     public String modify(Model model, @RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri) {
         model.addAttribute("board", boardService.get(bno));
-
         return "/board/modify";
     }
 
@@ -106,6 +106,7 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping(value = "/board/getAttachList", produces = "application/json;charset=utf-8")
     @ResponseBody
     public ResponseEntity<List<AttachFileDTO>> getAttachList(Long bno) {
