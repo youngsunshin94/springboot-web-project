@@ -126,9 +126,15 @@
                 alert("검색어 타입을 입력하세요");
                 return false;
             }
+
+            if(type.val() == "C") {
+                keyword.val(escape(keyword.val()));
+            }
             pageNum.val("1");
             searchForm.submit();
         });
+
+        searchForm.find("input[name='keyword']").val(unescape(searchForm.find("input[name='keyword']").val()));
 
         $(".ct_body ul li").each(function () {
             let bno = $(this).val();
