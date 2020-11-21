@@ -120,7 +120,7 @@ $(document).ready(function(){
 
     $("button[data-oper='modify']").on("click", function(e){
         e.preventDefault();
-        operForm.append("<input type='hidden' name='writer' value='${board.writer}' />");
+        // operForm.append("<input type='hidden' name='writer' value='[[${board.writer}]]' />");
         operForm.submit();
     });
 

@@ -78,8 +78,18 @@ $(document).ready(function(){
     $("button[data-oper='modify']").on("click", function (e){
         e.preventDefault();
 
+        if($("#title").val().length == 0 ) {
+            alert("제목을 입력하세요.");
+            return false;
+        }
+
         var content = escape($(".form_contents").html());
         $("textarea[name='content']").val(content);
+
+        if ($("textarea[name='content']").val().length == 0) {
+            alert("내용을 입력하세요.");
+            return false;
+        }
 
         let str = "";
         let fileCount = 0;

@@ -67,12 +67,14 @@ public class BoardController {
         return "/board/get";
     }
 
+
     @GetMapping("/board/modify")
     public String modify(Model model, @RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri) {
         model.addAttribute("board", boardService.get(bno));
         return "/board/modify";
     }
 
+    @PreAuthorize("authentication.principal.username == #boardForm.writer")
     @PostMapping("/board/modify")
     public String modify(BoardForm boardForm, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
 
@@ -106,7 +108,6 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping(value = "/board/getAttachList", produces = "application/json;charset=utf-8")
     @ResponseBody
     public ResponseEntity<List<AttachFileDTO>> getAttachList(Long bno) {

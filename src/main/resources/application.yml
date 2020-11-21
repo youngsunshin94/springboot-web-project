@@ -22,3 +22,7 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 #    배포시 주의
+server:
+  error:
+    whitelabel:
+      enabled: false

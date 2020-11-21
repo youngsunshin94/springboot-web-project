@@ -26,7 +26,8 @@ div {
 }
 p {
     font-size: 13px;
-    color: #4279ff;
+    /*color: #4279ff;*/
+    color: red;
 }
 .input_text {
     width: 100%;

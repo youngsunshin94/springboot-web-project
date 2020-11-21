@@ -2,6 +2,7 @@ package com.mycom.boardProject.domain;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,8 +12,14 @@ import java.time.LocalDateTime;
 public class MemberDTO {
 
     private Long id;
+
+    @NotBlank(message = "ID를 입력해주세요.")
     private String userId;
+
+    @NotBlank(message = "이름을 입력해주세요.")
     private String userName;
+
+    @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;

@@ -6,8 +6,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,16 +21,20 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PreAuthorize("hasRole('ROLE_MEMBER')")
     @GetMapping("/user/signup")
-    public String signUp() {
+    public String signUp(Model model) {
         log.info("signUp");
+        model.addAttribute("memberDTO", new MemberDTO());
         return "/signUp";
     }
 
     @PostMapping("/user/signup")
-    public String postSignUp(MemberDTO memberDTO) {
-        log.info("membercontroller signUp : " + memberDTO.getUserId());
+    public String postSignUp(@Valid MemberDTO memberDTO, BindingResult result) {
+        log.info("password: " + memberDTO.getPassword());
+        if (result.hasErrors()) {
+            return "/signUp";
+        }
+
         memberService.joinUser(memberDTO);
 
         return "redirect:/user/login";
