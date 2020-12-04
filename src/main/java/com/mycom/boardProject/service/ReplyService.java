@@ -3,14 +3,12 @@ package com.mycom.boardProject.service;
 import com.mycom.boardProject.domain.Board;
 import com.mycom.boardProject.domain.Criteria;
 import com.mycom.boardProject.domain.Reply;
-import com.mycom.boardProject.domain.ReplyPageDTO;
+import com.mycom.boardProject.dto.ReplyPageDTO;
 import com.mycom.boardProject.repository.BoardRepository;
 import com.mycom.boardProject.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

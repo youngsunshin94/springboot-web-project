@@ -1,11 +1,12 @@
 package com.mycom.boardProject.controller;
 
 import com.mycom.boardProject.domain.*;
+import com.mycom.boardProject.dto.AttachFileDTO;
+import com.mycom.boardProject.dto.BoardDTO;
+import com.mycom.boardProject.dto.PageDTO;
 import com.mycom.boardProject.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +31,12 @@ public class BoardController {
         log.info("list");
 
         Long total = boardService.getTotal(cri);
-        model.addAttribute("list", boardService.getList(cri));
+        List<Board> list = boardService.getList(cri);
+        List<BoardDTO> listDto = list.stream()
+                .map(board -> new BoardDTO(board))
+                .collect(Collectors.toList());
+
+        model.addAttribute("list", listDto);
         PageDTO pageDTO = new PageDTO(cri, total);
         model.addAttribute("pageMaker", pageDTO);
 
@@ -38,17 +46,17 @@ public class BoardController {
     @GetMapping("/board/register")
     public String create(Model model) {
         log.info("register");
-        model.addAttribute("boardForm", new BoardForm());
+        model.addAttribute("boardForm", new BoardDTO());
         return "/board/register";
     }
 
     @PostMapping("/board/register")
-    public String create(BoardForm boardForm, RedirectAttributes rttr) {
+    public String create(BoardDTO boardDTO, RedirectAttributes rttr) {
 
-        Board board = new Board(boardForm.getTitle(), boardForm.getContent(), boardForm.getWriter());
-        if(boardForm.getAttachList().size() > 0 && boardForm.getAttachList() != null) {
+        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getWriter());
+        if(boardDTO.getAttachList().size() > 0 && boardDTO.getAttachList() != null) {
             log.info("/board/register -> boardForm");
-            board.updateAttach(boardForm.getAttachList());
+            board.updateAttach(boardDTO.getAttachList());
 
             board.getAttachList().forEach(attach -> {
                 log.info("attach : " + attach.getFileName());
@@ -62,7 +70,11 @@ public class BoardController {
 
     @GetMapping("/board/get")
     public String get(Model model, @RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri) {
-        model.addAttribute("board", boardService.get(bno));
+        Board board = boardService.get(bno);
+        log.info("board title = " + board.getTitle());
+        BoardDTO boardDTO = BoardDTO.goToGet(board);
+        log.info("title = " + boardDTO.getTitle());
+        model.addAttribute("board", boardDTO);
 
         return "/board/get";
     }
@@ -70,21 +82,24 @@ public class BoardController {
 
     @GetMapping("/board/modify")
     public String modify(Model model, @RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri) {
-        model.addAttribute("board", boardService.get(bno));
+        Board board = boardService.get(bno);
+        BoardDTO boardDTO = BoardDTO.goToGet(board);
+
+        model.addAttribute("board", boardDTO);
         return "/board/modify";
     }
 
-    @PreAuthorize("authentication.principal.username == #boardForm.writer")
+    @PreAuthorize("authentication.principal.username == #boardDTO.writer")
     @PostMapping("/board/modify")
-    public String modify(BoardForm boardForm, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
+    public String modify(BoardDTO boardDTO, RedirectAttributes rttr, @ModelAttribute("cri") Criteria cri) {
 
-        Board board = new Board(boardForm.getTitle(), boardForm.getContent(), boardForm.getWriter());
-        board.updateBnoSetting(boardForm.getBno());
+//        Board board = new Board(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getWriter());
+//        board.updateBnoSetting(boardDTO.getBno());
 
-        if(boardForm.getAttachList().size() > 0 && boardForm.getAttachList() != null) {
-            board.updateAttach(boardForm.getAttachList());
-        }
-        boardService.modify(board);
+//        if(boardDTO.getAttachList().size() > 0 && boardDTO.getAttachList() != null) {
+//            board.updateAttach(boardDTO.getAttachList());
+//        }
+        boardService.modify(boardDTO, boardDTO.getBno());
 
         rttr.addFlashAttribute("result", "success");
 

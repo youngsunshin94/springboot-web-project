@@ -1,5 +1,6 @@
-package com.mycom.boardProject.domain;
+package com.mycom.boardProject.dto;
 
+import com.mycom.boardProject.domain.MemberEntity;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

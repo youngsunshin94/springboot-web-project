@@ -1,5 +1,6 @@
-package com.mycom.boardProject.domain;
+package com.mycom.boardProject.dto;
 
+import com.mycom.boardProject.domain.Criteria;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,6 @@
 package com.mycom.boardProject.controller;
 
-import com.mycom.boardProject.domain.AttachFileDTO;
+import com.mycom.boardProject.dto.AttachFileDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;

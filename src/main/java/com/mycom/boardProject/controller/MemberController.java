@@ -1,14 +1,12 @@
 package com.mycom.boardProject.controller;
 
-import com.mycom.boardProject.domain.MemberDTO;
+import com.mycom.boardProject.dto.MemberDTO;
 import com.mycom.boardProject.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 

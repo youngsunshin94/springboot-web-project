@@ -1,14 +1,14 @@
 package com.mycom.boardProject.service;
 
 import com.mycom.boardProject.domain.Attach;
-import com.mycom.boardProject.domain.AttachFileDTO;
+import com.mycom.boardProject.dto.AttachFileDTO;
 import com.mycom.boardProject.domain.Board;
 import com.mycom.boardProject.domain.Criteria;
+import com.mycom.boardProject.dto.BoardDTO;
 import com.mycom.boardProject.repository.AttachRepository;
 import com.mycom.boardProject.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,16 +63,21 @@ public class BoardService {
     }
 
     @Transactional
-    public void modify(Board board) {
-        attachRepository.deleteAll(board.getBno());
+    public void modify(BoardDTO boardDTO, Long bno) {
+
+        Board board = boardRepository.findOne(bno);
+        attachRepository.deleteAll(bno);
+
 
         if (board.getAttachList().size() != 0 || board.getAttachList() != null) {
+            board.updateAttach(boardDTO.getAttachList());
             board.getAttachList().forEach(attach -> {
                 attach.insertBoard(board);
                 attachRepository.save(attach);
             });
         }
-        boardRepository.save(board);
+
+        board.updateBoard(boardDTO.getTitle(), boardDTO.getContent());
     }
 
     public Long getTotal(Criteria cri) {

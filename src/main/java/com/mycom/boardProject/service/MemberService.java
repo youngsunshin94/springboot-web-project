@@ -1,6 +1,6 @@
 package com.mycom.boardProject.service;
 
-import com.mycom.boardProject.domain.MemberDTO;
+import com.mycom.boardProject.dto.MemberDTO;
 import com.mycom.boardProject.domain.MemberEntity;
 import com.mycom.boardProject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

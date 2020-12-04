@@ -1,11 +1,11 @@
 package com.mycom.boardProject.domain;
 
+import com.mycom.boardProject.dto.AttachFileDTO;
+import com.mycom.boardProject.dto.BoardDTO;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +53,8 @@ public class Board {
         this.bno = bno;
     }
 
+
+
     public void modifyDate() {
         this.updateDate = LocalDateTime.now();
     }
@@ -88,5 +90,11 @@ public class Board {
                 ", replyCnt=" + replyCnt +
                 ", attachList=" + attachList +
                 '}';
+    }
+
+    public void updateBoard(String title, String content) {
+        this.title = title;
+        this.content = content;
+        this.updateDate = LocalDateTime.now();
     }
 }

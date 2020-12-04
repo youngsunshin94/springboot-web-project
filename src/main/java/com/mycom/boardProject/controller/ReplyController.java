@@ -1,6 +1,8 @@
 package com.mycom.boardProject.controller;
 
 import com.mycom.boardProject.domain.*;
+import com.mycom.boardProject.dto.ReplyDTO;
+import com.mycom.boardProject.dto.ReplyPageDTO;
 import com.mycom.boardProject.service.BoardService;
 import com.mycom.boardProject.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/replies")
